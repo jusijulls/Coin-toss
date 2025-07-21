@@ -1,0 +1,26 @@
+services:
+  # API контейнер
+  api:
+    build: .
+    container_name: coin-flip-api
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - coin-flip-network
+
+  # Nginx контейнер для фронтенда
+  nginx:
+    build: ./nginx
+    container_name: coin-flip-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - coin-flip-network
+
+networks:
+  coin-flip-network:
+    driver: bridge 
